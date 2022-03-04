@@ -22,6 +22,7 @@ class PlayerNotificationService : Service() {
 
     companion object {
         const val PLAY_PAUSE_ACTION = "playPauseAction"
+        const val SET_VOLUME_ACTION = "setVolumeAction"
     }
 
     private lateinit var mPlayer: SimpleExoPlayer
@@ -187,9 +188,16 @@ class PlayerNotificationService : Service() {
                 0 -> mPlayer.playWhenReady = false
                 1 -> mPlayer.next()
                 2 -> mPlayer.previous()
-                3 -> Log.d("zaq1", mPlayer.currentPosition.toString())
+                3 -> {
+                    //Log.d("zaq1", mPlayer.currentPosition.toString())
+                    val intent = Intent("SET_POSITION")
+                    intent.putExtra("position", mPlayer.currentPosition)
+                    sendBroadcast(intent)
+                }
                 else -> {}
             }
+            val actionVolume = it.getFloatExtra(SET_VOLUME_ACTION, 0F)
+            mPlayer.volume = actionVolume
         }
         return super.onStartCommand(intent, flags, startId)
         return START_STICKY

@@ -62,6 +62,21 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        sbVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                changeVolume(progress.toFloat() / 100F)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
+
+    private fun changeVolume(volumeLevel: Float) {
+        startService(Intent(this, PlayerNotificationService::class.java).apply {
+            putExtra(PlayerNotificationService.SET_VOLUME_ACTION, volumeLevel)
+        })
+    }
+
 
 }
